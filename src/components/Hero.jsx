@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router";
+
 const Hero = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <div className="relative border-4  border-slate-900">
@@ -18,7 +22,10 @@ const Hero = () => {
           <p className="text-slate-100">
             Explore and discover your favorite movies from around the world.
           </p>
-          <button className="bg-amber-400 text-xl text-slate-800 p-3 rounded-lg font-extrabold cursor-pointer">
+          <button
+            onClick={() => navigate("/shows")}
+            className="bg-amber-400 text-xl text-slate-800 p-3 rounded-lg font-extrabold cursor-pointer"
+          >
             Explore Now
           </button>
         </div>
