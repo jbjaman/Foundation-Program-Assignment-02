@@ -5,7 +5,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="sticky top-0 mx-auto bg- flex items-center justify-between py-2  px-7 z-10    bg-linear-to-r from-amber-800 via-amber-100 to-blue-800 font-bold  text-slate-50 ">
+      <div className="sticky top-0 mx-auto bg- flex items-center justify-between py-2  px-7 z-10    bg-linear-to-r from-amber-800 via-slate-400 to-blue-800 font-bold  text-slate-50 ">
         <img
           src="/chobikhoj.png"
           alt=""

@@ -34,9 +34,20 @@ const Movies = () => {
   if (error) return <h2>Error: {error}</h2>;
 
   return (
-    <div className="bg-linear-to-r from-slate-900 via-amber-50 to-slate-900 p-4">
-      <div className="my-4">
-        <input type="text" className="border-2 w-full" />
+    <div className="bg-linear-to-r from-slate-900 via-slate-400 to-slate-900 p-4">
+      <div className="sticky top-20 z-30 mb-5">
+        <div className="flex items-center gap-3 rounded-full  border-4 border-slate-600 px-5 py-2 backdrop-blur-lg">
+          <span aria-hidden="true" className="text-slate-50">
+            Search
+          </span>
+          <input
+            type="text"
+            // value={query}
+            // onChange={(e) => setQuery(e.target.value)}
+            placeholder="your favourite movies here..."
+            className="w-full bg-transparent text-amber-200 placeholder-slate-400 focus:outline-none text-md"
+          />
+        </div>
       </div>
       <div className=" grid grid-cols-4 gap-4">
         {movies.map((show) => (
