@@ -1,16 +1,20 @@
-const Card = () => {
+const Card = ({ name, poster, rating, year }) => {
   return (
-    <div className="border-4 flex flex-col rounded-lg border-amber-300">
-      <div className="w-full bg-amber-300">POSTER</div>
+    <div className="relative rounded-lg ">
+      <img
+        src={poster}
+        alt=""
+        className="w-full rounded-lg hover:-translate-y-12 duration-500"
+      />
 
-      <div>
-        <h3 className="text-lg">SPIDERMAN</h3>
-        <div className="flex items-center gap-4 ">
-          <span>★ 5.0</span>
-          <span>2024</span>
+      <div className=" absolute bottom-0 bg-slate-900/80 w-full rounded-b-lg text-slate-50 p-2">
+        <h3 className=" text-xl font-bold mb-3">{name}</h3>
+        <div className="flex items-center justify-between ">
+          <span>⭐ {rating}</span>
+          <span>{year}</span>
         </div>
 
-        <button className="bg-amber-400 text-sm text-slate-800 px-4 py-2 rounded-md font-extrabold cursor-pointer">
+        <button className="mt-3 hover:bg-amber-400 text-sm hover:text-slate-800 px-4 py-2 rounded-md font-extrabold cursor-pointer w-full bg-transparent border-amber-400 border text-slate-50">
           See Details
         </button>
       </div>
