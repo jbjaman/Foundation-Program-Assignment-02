@@ -1,6 +1,6 @@
-import { Search } from "lucide-react";
+import { Clapperboard, LoaderPinwheel, Search } from "lucide-react";
 import { useEffect, useState } from "react";
-import { fetchMovies } from "../api/chobikhoj";
+import { fetchMovies, searchMovies } from "../api/chobikhoj";
 import Card from "../components/Card";
 
 const formatRating = (rating) => {
@@ -14,25 +14,38 @@ const formatYear = (premiered) => {
 
 const Movies = () => {
   const [movies, setMovies] = useState([]);
+  const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const getMovies = async () => {
-      try {
-        const data = await fetchMovies(0);
-        setMovies(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
+    let active = true;
+    const trimmed = query.trim();
+    const timer = setTimeout(
+      () => {
+        if (active) {
+          setLoading(true);
+          setError(null);
+        }
+        const load = trimmed ? searchMovies(trimmed) : fetchMovies(0);
+        load
+          .then((results) => {
+            if (active) setMovies(results);
+          })
+          .catch((err) => {
+            if (active) setError(err.message);
+          })
+          .finally(() => {
+            if (active) setLoading(false);
+          });
+      },
+      trimmed ? 350 : 0,
+    );
+    return () => {
+      active = false;
+      clearTimeout(timer);
     };
-    getMovies();
-  }, []);
-
-  if (loading) return <h2>Loading...</h2>;
-  if (error) return <h2>Error: {error}</h2>;
+  }, [query]);
 
   return (
     <div className="bg-linear-to-r from-slate-900 via-slate-400 to-slate-900 p-4">
@@ -46,26 +59,52 @@ const Movies = () => {
           </span>
           <input
             type="text"
-            // value={query}
-            // onChange={(e) => setQuery(e.target.value)}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder="your favourite movies here..."
             className="w-full bg-transparent text-amber-200 placeholder-slate-400 focus:outline-none text-md"
           />
         </div>
       </div>
-      <div className=" grid grid-cols-4 gap-4">
-        {movies.map((show) => (
-          <>
-            <Card
-              key={show.id}
-              name={show.name}
-              poster={show.image?.medium}
-              rating={formatRating(show.rating)}
-              year={formatYear(show.premiered)}
-            />
-          </>
-        ))}
-      </div>
+
+      {error && (
+        <p className="rounded-lg border border-marquee-velvet bg-marquee-velvet/20 px-4 py-3 font-body text-sm text-marquee-cream h-screen">
+          {error}
+        </p>
+      )}
+      {loading && (
+        <div className="h-screen  flex flex-col items-center justify-center text-white text-xl font-bold">
+          <span className="animate-spin">
+            <LoaderPinwheel size={50} />
+          </span>
+          <p>Searching Movies, Please wait...</p>
+        </div>
+      )}
+
+      {!loading && !error && movies.length === 0 && (
+        <p className="h-screen  flex flex-col items-center justify-center text-red-900 text-xl font-bold animate-pulse">
+          <span>
+            <Clapperboard size={50} />
+          </span>{" "}
+          Nothing matches that title. Try another search...
+        </p>
+      )}
+
+      {!loading && !error && movies.length > 0 && (
+        <div className=" grid grid-cols-4 gap-4">
+          {movies.map((show) => (
+            <>
+              <Card
+                key={show.id}
+                name={show.name}
+                poster={show.image?.medium}
+                rating={formatRating(show.rating)}
+                year={formatYear(show.premiered)}
+              />
+            </>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
