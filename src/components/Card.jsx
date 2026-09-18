@@ -1,6 +1,6 @@
 import { CalendarDays, Film, Star } from "lucide-react";
 
-const Card = ({ name, poster, rating, year }) => {
+const Card = ({ name, poster, rating, year, showDetails }) => {
   return (
     <div className="relative rounded-lg ">
       <img
@@ -24,7 +24,10 @@ const Card = ({ name, poster, rating, year }) => {
           </span>
         </div>
 
-        <button className="mt-3 hover:bg-amber-400 text-sm hover:text-slate-800 px-4 py-2 rounded-md font-extrabold cursor-pointer w-full bg-transparent border-amber-400 border text-slate-50">
+        <button
+          onClick={showDetails}
+          className="mt-3 hover:bg-amber-400 text-sm hover:text-slate-800 px-4 py-2 rounded-md font-extrabold cursor-pointer w-full bg-transparent border-amber-400 border text-slate-50"
+        >
           See Details
         </button>
       </div>

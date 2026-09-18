@@ -2,6 +2,7 @@ import { Clapperboard, LoaderPinwheel, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { fetchMovies, searchMovies } from "../api/chobikhoj";
 import Card from "../components/Card";
+import CardModal from "../components/CardModal";
 
 const formatRating = (rating) => {
   const value = rating?.average;
@@ -17,6 +18,7 @@ const Movies = () => {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   useEffect(() => {
     let active = true;
@@ -73,7 +75,7 @@ const Movies = () => {
         </p>
       )}
       {loading && (
-        <div className="h-screen  flex flex-col items-center justify-center text-white text-xl font-bold">
+        <div className="h-screen  flex flex-col items-center justify-center text-white lg:text-xl font-bold text-center">
           <span className="animate-spin">
             <LoaderPinwheel size={50} />
           </span>
@@ -82,7 +84,7 @@ const Movies = () => {
       )}
 
       {!loading && !error && movies.length === 0 && (
-        <p className="h-screen  flex flex-col items-center justify-center text-red-900 text-xl font-bold animate-pulse">
+        <p className=" h-screen flex flex-col items-center justify-center text-red-900 lg:text-xl font-bold animate-pulse text-center ">
           <span>
             <Clapperboard size={50} />
           </span>{" "}
@@ -91,7 +93,7 @@ const Movies = () => {
       )}
 
       {!loading && !error && movies.length > 0 && (
-        <div className=" grid grid-cols-4 gap-4">
+        <div className=" grid  lg:grid-cols-4 gap-4">
           {movies.map((show) => (
             <>
               <Card
@@ -100,11 +102,14 @@ const Movies = () => {
                 poster={show.image?.medium}
                 rating={formatRating(show.rating)}
                 year={formatYear(show.premiered)}
+                showDetails={() => setSelectedMovie(show)}
               />
             </>
           ))}
         </div>
       )}
+
+      <CardModal show={selectedMovie} onClose={() => setSelectedMovie(null)} />
     </div>
   );
 };
